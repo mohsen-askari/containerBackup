@@ -4,6 +4,12 @@ MAX_BACKUP_FILES=24  #change to 24
 BACKUP_MAIN_DIR="/home/majid/container_backups"
 CONTAINER_BACKUP_DIR="backup"
 
+
+remote_server_ip="127.0.0.1"           # Replace with your remote server ip
+remote_server_user="your_remote_user"  # Replace with your remote server username
+remote_server_backup_dir="/home/"
+
+
 # Check if backup main directory exists, create if not
 if [ ! -d $BACKUP_MAIN_DIR ]; then       #/home/majid/containerbackup  directory exist or not
         mkdir -p $BACKUP_MAIN_DIR
@@ -38,3 +44,10 @@ for (( i=1 ; i<=$(docker ps -aq | wc -l) ; i++ ));
 done
 
 
+
+
+# Copy the backup directory to the remote server
+scp -r "$backup_dir" "$remote_server_user"@"$remote_server_ip":"$remote_server_backup_dir"
+
+
+echo "Backup and transfer to remote server completed successfully at $(date '+%Y-%m-%d %H:%M:%S')"
